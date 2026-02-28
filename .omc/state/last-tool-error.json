@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"sudo ln -sf ~/Documents/scripts/ytmv-repo/ytmv.py /usr/local/bin/ytmv && ls -la /usr/local/bin/ytmv\",\"description\":\"Create symlink to new script location\"}",
-  "error": "Exit code 1\nsudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper\nsudo: a password is required",
-  "timestamp": "2026-02-28T22:08:15.446Z",
-  "retry_count": 1
-}
