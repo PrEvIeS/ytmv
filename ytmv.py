@@ -41,7 +41,7 @@ DEFAULTS = {
     'output_dir_video': '~/Movies/shorts',
     'output_dir_audio': '~/Movies/audios',
     'video_quality': '1080',
-    'audio_quality': '192',
+    'audio_quality': '192k',
     'audio_format': 'm4a',
     'download_thumbnails': 'false',
     'download_subtitles': 'false',
