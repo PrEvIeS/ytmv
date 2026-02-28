@@ -708,7 +708,7 @@ def download_playlist(url: str, options: DownloadOptions) -> list[Path]:
     failed = []
     parallel = int(get_config_value('parallel_downloads'))
 
-    console.print(f"[bold green]Запуск {parallel} параллельных потоков загрузки...[/bold green]\n")
+    console.print(f"[bold green]🚀 Запуск {parallel} параллельных потоков загрузки...[/bold green]\n")
 
     with ThreadPoolExecutor(max_workers=parallel) as executor:
         # Submit all tasks at once for true parallelism
