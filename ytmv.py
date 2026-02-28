@@ -2,6 +2,8 @@
 """
 Universal video/audio downloader with Russian transliteration support.
 Interactive CLI wizard for downloading videos and playlists from 1000+ sites.
+
+Version: 1.0.1
 """
 
 from __future__ import annotations
