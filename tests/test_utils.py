@@ -20,7 +20,7 @@ class TestTransliterate:
     def test_russian_complex(self):
         """Test complex Russian letters."""
         assert transliterate("щука") == "shchuka"
-        assert transliterate("ёжик") == "yo zhik"
+        assert transliterate("ёжик") == "yozhik"
         assert transliterate("шш") == "shsh"
 
     def test_ukrainian(self):
