@@ -1,12 +1,8 @@
 """Tests for ytmv configuration."""
 
-import pytest
-import tempfile
 from pathlib import Path
-from unittest.mock import patch, mock_open
-
-# Import after creating temp config
 import sys
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
@@ -70,8 +66,8 @@ class TestDownloadOptions:
         assert options.video_quality == '1080'
         assert options.audio_quality == '192k'
         assert options.audio_format == 'm4a'
-        assert options.download_thumbnail == False
-        assert options.download_subtitles == False
+        assert options.download_thumbnail is False
+        assert options.download_subtitles is False
 
     def test_custom_values(self):
         """Test DownloadOptions with custom values."""

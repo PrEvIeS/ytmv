@@ -6,13 +6,10 @@ Interactive CLI wizard for downloading videos and playlists from 1000+ sites.
 
 from __future__ import annotations
 
-import atexit
 import configparser
 import json
-import os
 import re
 import subprocess
-import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
@@ -440,8 +437,6 @@ def embed_metadata(input_file: Path, output_file: Path, info: VideoInfo, thumbna
 def convert_file(input_file: Path, output_file: Path, options: DownloadOptions,
                  info: Optional[VideoInfo] = None, quiet: bool = False):
     """Convert downloaded file to final format."""
-    thumbnail_path = None
-
     if options.mode == DownloadMode.AUDIO:
         fmt = options.audio_format
         codec_map = {
@@ -494,12 +489,6 @@ def convert_file(input_file: Path, output_file: Path, options: DownloadOptions,
                 status.__exit__(None, None, None)
 
     else:  # VIDEO mode
-        # Build quality filter
-        if options.video_quality == 'best':
-            vfilter = ''
-        else:
-            vfilter = f"-vf 'scale=-2:{options.video_quality}'"
-
         with Progress(
             SpinnerColumn(),
             TextColumn("[progress.description]{task.description}"),
@@ -598,10 +587,9 @@ def download_single(url: str, options: DownloadOptions) -> Path:
     temp_file = temp_files[0]
 
     # Download thumbnail
-    thumb_path = None
     if options.download_thumbnail:
         console.print("[dim]Скачивание превью...[/dim]")
-        thumb_path = download_thumbnail(url, output_file.with_suffix(''))
+        download_thumbnail(url, output_file.with_suffix(''))
 
     # Download subtitles
     if options.download_subtitles:
@@ -705,7 +693,7 @@ def download_playlist(url: str, options: DownloadOptions) -> list[Path]:
     # Apply range filter
     start = max(1, options.playlist_start)
     end = min(total, options.playlist_end) if options.playlist_end else total
-    entries = playlist_info['entries'][start-1:end]
+    entries = playlist_info['entries'][start - 1:end]
     actual_total = len(entries)
 
     console.print(Panel.fit(
@@ -804,10 +792,10 @@ def show_preview(state: WizardState) -> bool:
         state.info = {'type': 'playlist', 'count': count, 'info': playlist_info}
     else:
         info = get_video_info(state.url)
+        title_extra = f"\n[bold cyan]Автор:[/bold cyan] {info.uploader}" if info.uploader else ""
         console.print(Panel.fit(
             f"[bold cyan]Тип:[/bold cyan] Видео\n"
-            f"[bold cyan]Название:[/bold cyan] {info.title}" +
-            (f"\n[bold cyan]Автор:[/bold cyan] {info.uploader}" if info.uploader else ""),
+            f"[bold cyan]Название:[/bold cyan] {info.title}{title_extra}",
             title="[bold green]Предпросмотр[/bold green]"
         ))
         state.info = {'type': 'video', 'title': info.title, 'video_info': info}

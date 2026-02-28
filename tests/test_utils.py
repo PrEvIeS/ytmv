@@ -1,7 +1,11 @@
 """Tests for ytmv utility functions."""
 
-import pytest
-from ytmv import transliterate, sanitize_filename
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).parent.parent))  # noqa: E402
+
+from ytmv import transliterate, sanitize_filename  # noqa: E402
 
 
 class TestTransliterate:
