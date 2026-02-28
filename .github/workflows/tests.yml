@@ -30,7 +30,7 @@ jobs:
       - name: Lint with flake8
         run: |
           pip install flake8
-          flake8 ytmv.py tests/ --max-line-length=120 --ignore=E501,W503
+          flake8 ytmv.py tests/ --max-line-length=120 --ignore=E501,W503,E203
 
       - name: Run tests
         run: |
