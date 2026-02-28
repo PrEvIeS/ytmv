@@ -51,7 +51,17 @@
 
 ## Установка
 
-### macOS
+### macOS (Homebrew - рекомендуется)
+
+```bash
+# Добавить tap
+brew tap PrEvIeS/tap
+
+# Установить ytmv
+brew install ytmv
+```
+
+### macOS (вручную)
 
 ```bash
 # Установка зависимостей
