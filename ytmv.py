@@ -708,31 +708,37 @@ def download_playlist(url: str, options: DownloadOptions) -> list[Path]:
     failed = []
     parallel = int(get_config_value('parallel_downloads'))
 
-    with Progress(
-        TextColumn("[bold blue]{task.description}"),
-        BarColumn(),
-        TaskProgressColumn(),
-        console=console
-    ) as progress:
-        main_task = progress.add_task("[yellow]Скачивание плейлиста...", total=actual_total)
+    console.print(f"[bold green]Запуск {parallel} параллельных потоков загрузки...[/bold green]\n")
 
-        with ThreadPoolExecutor(max_workers=parallel) as executor:
-            futures = {
-                executor.submit(download_playlist_item, entry, start + idx, options, actual_total): entry
-                for idx, entry in enumerate(entries)
-            }
+    with ThreadPoolExecutor(max_workers=parallel) as executor:
+        # Submit all tasks at once for true parallelism
+        futures = {}
+        for idx, entry in enumerate(entries):
+            future = executor.submit(download_playlist_item, entry, start + idx, options, actual_total)
+            futures[future] = (entry, idx)
+            console.print(f"[dim]→ Запуск загрузки трека {start + idx}...[/dim]")
 
-            for future in as_completed(futures):
+        console.print()
+
+        # Collect results as they complete
+        completed = 0
+        for future in as_completed(futures):
+            entry, idx = futures[future]
+            completed += 1
+
+            try:
                 success, title, output_file = future.result()
 
                 if success and output_file:
                     downloaded_files.append(output_file)
-                    console.print(f"  [green]✓[/green] {title[:50]}")
+                    console.print(f"  [green]✓[/green] [{completed}/{actual_total}] {title[:50]}")
                 else:
                     failed.append(title)
-                    console.print(f"  [red]✗[/red] {title[:50]}")
-
-                progress.advance(main_task)
+                    console.print(f"  [red]✗[/red] [{completed}/{actual_total}] {title[:50]}")
+            except Exception as e:
+                title = entry.get('title', f'Track {idx}')
+                failed.append(title)
+                console.print(f"  [red]✗[/red] [{completed}/{actual_total}] {title[:50]} - {e}")
 
     # Add to history
     add_to_history(url, f"Playlist ({actual_total} items)", str(options.output_dir), f"playlist_{options.mode.value}")
