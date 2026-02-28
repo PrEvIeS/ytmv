@@ -1,7 +1,7 @@
 """Tests for ytmv configuration."""
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -13,12 +13,12 @@ class TestConfig:
         """Test default configuration values."""
         from ytmv import DEFAULTS
 
-        assert 'output_dir_video' in DEFAULTS
-        assert 'output_dir_audio' in DEFAULTS
-        assert 'video_quality' in DEFAULTS
-        assert 'audio_quality' in DEFAULTS
-        assert 'max_retries' in DEFAULTS
-        assert 'parallel_downloads' in DEFAULTS
+        assert "output_dir_video" in DEFAULTS
+        assert "output_dir_audio" in DEFAULTS
+        assert "video_quality" in DEFAULTS
+        assert "audio_quality" in DEFAULTS
+        assert "max_retries" in DEFAULTS
+        assert "parallel_downloads" in DEFAULTS
 
 
 class TestVideoInfo:
@@ -28,10 +28,7 @@ class TestVideoInfo:
         """Test VideoInfo creation."""
         from ytmv import VideoInfo
 
-        info = VideoInfo(
-            url="https://example.com/video",
-            title="Test Video"
-        )
+        info = VideoInfo(url="https://example.com/video", title="Test Video")
 
         assert info.url == "https://example.com/video"
         assert info.title == "Test Video"
@@ -46,7 +43,7 @@ class TestVideoInfo:
             url="https://example.com/video",
             title="Test Video",
             duration=120,
-            uploader="TestUser"
+            uploader="TestUser",
         )
 
         assert info.duration == 120
@@ -58,27 +55,25 @@ class TestDownloadOptions:
 
     def test_defaults(self):
         """Test DownloadOptions default values."""
-        from ytmv import DownloadOptions, DownloadMode
+        from ytmv import DownloadMode, DownloadOptions
 
         options = DownloadOptions()
 
         assert options.mode == DownloadMode.VIDEO
-        assert options.video_quality == '1080'
-        assert options.audio_quality == '192k'
-        assert options.audio_format == 'm4a'
+        assert options.video_quality == "1080"
+        assert options.audio_quality == "192k"
+        assert options.audio_format == "m4a"
         assert options.download_thumbnail is False
         assert options.download_subtitles is False
 
     def test_custom_values(self):
         """Test DownloadOptions with custom values."""
-        from ytmv import DownloadOptions, DownloadMode
+        from ytmv import DownloadMode, DownloadOptions
 
         options = DownloadOptions(
-            mode=DownloadMode.AUDIO,
-            audio_format='mp3',
-            audio_quality='320k'
+            mode=DownloadMode.AUDIO, audio_format="mp3", audio_quality="320k"
         )
 
         assert options.mode == DownloadMode.AUDIO
-        assert options.audio_format == 'mp3'
-        assert options.audio_quality == '320k'
+        assert options.audio_format == "mp3"
+        assert options.audio_quality == "320k"
